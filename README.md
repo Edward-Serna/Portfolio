@@ -1,5 +1,5 @@
 # Web Portfolio
-Howdy, my name is Edward, and this fun project is where I am going to add most of my project and resources used during my undergrad. If there's any issue with a webpage or errors please let me know [sernaedward@gmail.com](sernaedward@gmail.com).
+Howdy, my name is Edward, and this fun project is where I am going to add most of my project and resources used during my undergrad. If there's any issue with a webpage or errors please let me know *sernaedward@gmail.com*.
 
 My webpage is hosted on [Vercel](https://vercel.com/home) with their deployment service. and designed with the [Next.js]() framework.
 [https://edwardserna.dev](https://edwardserna.dev)
