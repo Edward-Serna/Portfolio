@@ -45,7 +45,7 @@ export const metadata = {
     siteName: "Edward Serna Portfolio",
     images: [
       {
-        url: "https://edwardserna.dev/og-image.png", 
+        url: "https://edwardserna.dev/og-image.jpg", 
         width: 1200,
         height: 630,
         alt: "Edward Serna - Computer Engineering Portfolio",
@@ -56,7 +56,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Edward Serna | Computer Engineering Portfolio",
     description: "Computer Engineering graduate from UTSA specializing in embedded systems, machine learning, and full-stack development. This web app is a compulation of all my projects and ideas in one place. The goal is to have a outline of what I have done and will be doing in the upcoming years.",
-    images: ["https://edwardserna.dev/og-image.png"],
+    images: ["https://edwardserna.dev/og-image.jpg"],
   },
   robots: {
     index: true,
