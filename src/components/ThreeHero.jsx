@@ -81,7 +81,7 @@ export default function ThreeHero() {
         tile.userData = {
           initialY: tile.position.y,
           initialX: tile.position.x,
-          speed: 0.5 + Math.random() * 0.5,
+          speed: 0.5 + Math.random() * 0.25,
           rotationSpeed: 0.001 + Math.random() * 0.002,
           amplitude: 2 + Math.random() * 3,
           phase: Math.random() * Math.PI * 2

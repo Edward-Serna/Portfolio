@@ -45,7 +45,7 @@ export const metadata = {
     siteName: "Edward Serna Portfolio",
     images: [
       {
-        url: "https://edwardserna.dev/og-image.png", // You can create this later
+        url: "https://edwardserna.dev/og-image.png", 
         width: 1200,
         height: 630,
         alt: "Edward Serna - Computer Engineering Portfolio",
