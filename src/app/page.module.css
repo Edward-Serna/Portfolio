@@ -22,8 +22,8 @@
   position: relative;
   height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: start;
+  justify-content: start;
   overflow: hidden;
 }
 
@@ -37,29 +37,19 @@
 .heroContent {
   position: relative;
   z-index: 10;
-  text-align: center;
+  text-align: start;
   padding: 2rem;
+  margin-top: 20vh;
 }
 
 .heroText {
   animation: fadeInUp 1s ease-out;
 }
 
-.greeting {
-  font-family: 'Space Mono', monospace;
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  color: var(--primary);
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  display: block;
-  margin-bottom: 1rem;
-  animation: glitchText 3s infinite;
-}
-
 .name {
   font-family: 'Orbitron', sans-serif;
-  font-size: clamp(3rem, 12vw, 5rem);
-  font-weight: 900;
+  font-size: clamp(1rem, 12vw, 2.8rem);
+  font-weight: 700;
   margin: 0;
   background: linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 50%, var(--secondary) 100%);
   background-size: 200% 200%;
@@ -77,14 +67,18 @@
   color: var(--text-dim);
   margin: 2rem 0;
   letter-spacing: 0.05em;
+  max-width: 500px;
 }
 
 .heroCtas {
   display: flex;
-  gap: 1.5rem;
+  flex-direction: row;
+  gap: 1.2rem;
   justify-content: center;
-  margin-top: 3rem;
+  margin-top: 1rem;
   flex-wrap: wrap;
+  width: 100%;
+  height: fit-content;
 }
 
 .primaryBtn,
@@ -102,6 +96,8 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   display: inline-block;
+  text-align: center;
+  width: fit-content;
 }
 
 .primaryBtn {
@@ -177,7 +173,6 @@
   height: 3px;
 }
 
-/* About Section */
 .aboutContent {
   display: grid;
   gap: 4rem;
@@ -232,7 +227,6 @@
   transform: translateY(-2px);
 }
 
-/* Projects Grid */
 .projectsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -356,9 +350,10 @@
 
 .contactText {
   font-family: 'Space Mono', monospace;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--text-dim);
   margin-bottom: 2rem;
+  position: relative;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
@@ -367,12 +362,15 @@
 .contactBtn {
   font-family: 'Space Mono', monospace;
   display: inline-block;
-  padding: 1.2rem 3rem;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  padding: 1rem;
   background: transparent;
   border: 2px solid var(--primary);
+  border-radius: 5px;
   color: var(--primary);
-  font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   cursor: pointer;
@@ -399,7 +397,7 @@
 }
 
 .contactBtn:hover {
-  color: var(--bg-dark);
+  color: var(--tertiary);
   box-shadow: 0 0 30px var(--accent-glow);
 }
 
@@ -492,6 +490,13 @@
 @media (max-width: 768px) {
   .projectsGrid {
     grid-template-columns: 1fr;
+  }
+  .hero{
+    width: 100vw;;
+  }
+
+  .name{
+    text-align: center;
   }
   
   .heroCtas {

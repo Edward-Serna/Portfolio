@@ -63,7 +63,6 @@ export default function Home() {
         <ThreeHero />
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
-            <span className={styles.greeting}>Hey, I'm</span>
             <h1 className={styles.name}>Edward Serna</h1>
             <p className={styles.tagline}>
               Computer Engineering Graduate • Embedded Systems • Full-Stack Developer
