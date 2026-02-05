@@ -58,7 +58,6 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
-      {/* 3D Hero Section */}
       <section className={styles.hero}>
         <ThreeHero />
         <div className={styles.heroContent}>
@@ -83,7 +82,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Section */}
       <section className={styles.about} id="about">
         <div className={styles.container}>
           <h2 className={styles.sectionTitle}>About Me</h2>
@@ -92,8 +90,8 @@ export default function Home() {
               Computer Engineering graduate from UTSA with hands-on experience in machine learning, 
               embedded systems development, and full-stack web applications. Passionate about applying 
               deep learning techniques to automated decision support systems and developing intelligent 
-              solutions that integrate software and hardware. Currently working as a Research Assistant 
-              in the Unmanned Systems Lab on autonomous drone systems.
+              solutions that integrate software and hardware. Previously worked as a Research Assistant 
+              in the Unmanned Systems Lab on our Modifly drone systems.
             </p>
             <div className={styles.skills}>
               <div className={styles.skillCategory}>
@@ -141,7 +139,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Projects Grid */}
       <section className={styles.projects} id="projects">
         <div className={styles.container}>
           <h2 className={styles.sectionTitle}>Featured Projects</h2>
@@ -171,7 +168,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Section */}
       <section className={styles.contact}>
         <div className={styles.container}>
           <h2 className={styles.sectionTitle}>Get In Touch</h2>
@@ -187,7 +183,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className={styles.footer}>
         <div className={styles.footerLinks}>
           <a
