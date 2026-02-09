@@ -38,9 +38,10 @@
   z-index: 10;
   text-align: center;
   justify-content: center;
-  align-content: center;
+  top: 25vh;
   padding: 2rem;
-  height: 100vh;
+  height: 100vh;  
+  
 }
 
 .heroText {
@@ -496,6 +497,7 @@
 
   .heroContent {
     left: 0%;
+    top: 20vh;
     text-align: center;
 
   }
