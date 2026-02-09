@@ -14,7 +14,8 @@ export default function ThreeHero() {
     // Scene setup
     const scene = new THREE.Scene();
     sceneRef.current = scene;
-    scene.fog = new THREE.FogExp2(0x0a0a0f, 0.02);
+    // #37393d
+    scene.fog = new THREE.FogExp2(0x37393d, 0);
 
     // Camera
     const camera = new THREE.PerspectiveCamera(
@@ -24,7 +25,7 @@ export default function ThreeHero() {
       1000
     );
     camera.position.z = 50;
-    camera.position.y = 10;
+    camera.position.y = -50;
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ 
@@ -35,39 +36,41 @@ export default function ThreeHero() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    // Lighting 
+   // #ffffff;
+    const ambientLight = new THREE.AmbientLight(0xffffff, 20);
     scene.add(ambientLight);
-
-    const pointLight1 = new THREE.PointLight(0x00ff88, 2, 100);
+    // #000000, #ff0088, #000000
+    const pointLight1 = new THREE.PointLight(0x000000, 20, 100);
     pointLight1.position.set(20, 20, 20);
     scene.add(pointLight1);
 
-    const pointLight2 = new THREE.PointLight(0xff0088, 2, 100);
+    const pointLight2 = new THREE.PointLight(0xff0088, 20, 100);
     pointLight2.position.set(-20, -20, 20);
     scene.add(pointLight2);
 
-    const pointLight3 = new THREE.PointLight(0x00d4ff, 1.5, 100);
+    const pointLight3 = new THREE.PointLight(0x000000, 1.5, 100);
     pointLight3.position.set(0, 20, -20);
     scene.add(pointLight3);
 
     // Create floating tiles grid
     const tiles = [];
-    const gridSize = 12;
+    const gridSize = 0;
     const spacing = 5;
     const tileGeometry = new THREE.BoxGeometry(3, 3, 0.5);
     
     for (let i = 0; i < gridSize; i++) {
       for (let j = 0; j < gridSize; j++) {
         const material = new THREE.MeshPhysicalMaterial({
-          color: 0x1a1a2e,
+          // #0d0d0d #1f1f1f
+          color: 0x1f1f1f,
           metalness: 0.9,
           roughness: 0.1,
           envMapIntensity: 1,
           clearcoat: 1,
           clearcoatRoughness: 0.1,
-          emissive: new THREE.Color(0x00ff88),
-          emissiveIntensity: 0.1
+          emissive: new THREE.Color(0x000000),
+          emissiveIntensity: 10
         });
 
         const tile = new THREE.Mesh(tileGeometry, material);
@@ -106,7 +109,8 @@ export default function ThreeHero() {
     particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
     const particleMaterial = new THREE.PointsMaterial({
-      color: 0x00ff88,
+      // #ffffff 
+      color: 0xffffff ,
       size: 0.3,
       transparent: true,
       opacity: 0.6,
@@ -150,7 +154,7 @@ export default function ThreeHero() {
         const distanceY = tile.position.y - mouse.y * 30;
         const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
         
-        if (distance < 20) {
+        if (distance < 0) {
           const force = (20 - distance) / 20;
           tile.position.x += (mouse.x * 30 - tile.position.x) * force * 0.1;
           tile.position.y += (mouse.y * 30 - tile.position.y) * force * 0.1;

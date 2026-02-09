@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 // Dynamic import for Three.js component to avoid SSR issues
 const ThreeHero = dynamic(() => import('@/components/ThreeHero'), { 
-  ssr: false,
+  // ssr: false,
   loading: () => <></>
 });
 
