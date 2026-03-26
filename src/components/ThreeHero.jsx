@@ -2,17 +2,40 @@
 
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
 export default function ThreeHero() {
   const containerRef = useRef(null);
   const sceneRef = useRef(null);
   const animationFrameRef = useRef(null);
 
+  
   useEffect(() => {
     if (!containerRef.current) return;
 
     // Scene setup
     const scene = new THREE.Scene();
+    const loader = new OBJLoader();
+
+    loader.load(
+    'SpaceShip.obj', 
+
+    // called when resource is loaded
+    function ( object ) {
+        scene.add( object );
+    },
+
+    // called when loading is in progresses
+    function ( xhr ) {
+        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+    },
+
+    // called when loading has errors
+    function ( error ) {
+        console.log( 'An error happened' );
+    }
+    );
+
     sceneRef.current = scene;
     // #37393d
     scene.fog = new THREE.FogExp2(0x37393d, 0);
