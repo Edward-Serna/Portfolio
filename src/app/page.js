@@ -62,19 +62,20 @@ export default function Home() {
         <ThreeHero />
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
+            <div className={styles.personal}> 
             <h1 className={styles.name}>Edward Serna</h1>
+            <img src="Personal-Headshot.png" alt="Edward Serna" className={styles.headshot} />
+            </div>
             <p className={styles.tagline}>
               Computer Engineering Graduate • Embedded Systems • Full-Stack Developer
             </p>
+            
             <div className={styles.heroCtas}>
               <Link href="#projects" className={styles.primaryBtn}>
                 View Projects
               </Link>
-              <a 
-                href="/Edward_Serna_Resume.pdf" 
-                className={styles.secondaryBtn}
-                download="Edward_Serna_Resume.pdf"
-              >
+              <a href="/Edward_Serna_Resume.pdf" className={styles.secondaryBtn}
+                download="Edward_Serna_Resume.pdf">
                 Download Resume
               </a>
             </div>

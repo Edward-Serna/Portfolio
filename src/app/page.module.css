@@ -27,7 +27,7 @@
 }
 
 .loading {
-  font-family: 'Space Mono', monospace;
+  font-family: 'Roboto-Regular';
   color: var(--primary);
   font-size: 1.2rem;
   animation: pulse 1.5s ease-in-out infinite;
@@ -38,19 +38,23 @@
   z-index: 10;
   text-align: center;
   justify-content: center;
-  top: 25vh;
+  top: 18vh;
   padding: 2rem;
-  height: 100vh;  
+  height: 90vh;  
   
 }
 
 .heroText {
+  display: flex;
+  flex-direction: column;
   animation: fadeInUp 1s ease-out;
+  justify-items: center;
+  gap: 45px;
 }
 
 .name {
   font-family: 'Orbitron', sans-serif;
-  font-size: clamp(1.5rem, 11vw, 3.2rem);
+  font-size: clamp(1.5rem, 15vw, 4.8rem);
   font-weight: 700;
   margin: 0;
   background: linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 50%, var(--secondary) 100%);
@@ -59,7 +63,7 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradientShift 5s ease infinite;
-  text-shadow: 0 0 80px var(--accent-glow);
+  text-shadow: 0 0 50px var(--accent-glow);
   line-height: 1.1;
 }
 
@@ -69,7 +73,26 @@
   color: var(--text-dim);
   margin: 2rem 0;
   letter-spacing: 0.04em;
-  max-width: 485px;
+  max-width: fit-content
+}
+
+.personal {
+  display: flex;
+  justify-content: space-evenly;
+  /* margin: auto; */
+  flex-direction: row;
+  align-items: center;
+  gap: 1.0rem;
+}
+
+.headshot {
+  width: 180px;
+  height: 180px;
+  border-radius: 30%;
+  object-fit: cover;
+  margin-top: 1rem;
+  border: 4px solid var(--primary);
+  box-shadow: 0 0 20px var(--accent-glow);
 }
 
 .heroCtas {
@@ -497,9 +520,15 @@
 
   .heroContent {
     left: 0%;
-    top: 20vh;
+    top: 15vh;
     text-align: center;
 
+  }
+
+  .personal {
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
   }
 
   .name{

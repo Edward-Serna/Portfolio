@@ -15,34 +15,13 @@ export default function ThreeHero() {
 
     // Scene setup
     const scene = new THREE.Scene();
-    const loader = new OBJLoader();
-
-    loader.load(
-    'SpaceShip.obj', 
-
-    // called when resource is loaded
-    function ( object ) {
-        scene.add( object );
-    },
-
-    // called when loading is in progresses
-    function ( xhr ) {
-        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-    },
-
-    // called when loading has errors
-    function ( error ) {
-        console.log( 'An error happened' );
-    }
-    );
 
     sceneRef.current = scene;
     // #37393d
     scene.fog = new THREE.FogExp2(0x37393d, 0);
 
-    // Camera
     const camera = new THREE.PerspectiveCamera(
-      75,
+      30,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
@@ -78,45 +57,6 @@ export default function ThreeHero() {
 
     // Create floating tiles grid
     const tiles = [];
-    const gridSize = 0;
-    const spacing = 5;
-    const tileGeometry = new THREE.BoxGeometry(3, 3, 0.5);
-    
-    for (let i = 0; i < gridSize; i++) {
-      for (let j = 0; j < gridSize; j++) {
-        const material = new THREE.MeshPhysicalMaterial({
-          // #0d0d0d #1f1f1f
-          color: 0x1f1f1f,
-          metalness: 0.9,
-          roughness: 0.1,
-          envMapIntensity: 1,
-          clearcoat: 1,
-          clearcoatRoughness: 0.1,
-          emissive: new THREE.Color(0x000000),
-          emissiveIntensity: 10
-        });
-
-        const tile = new THREE.Mesh(tileGeometry, material);
-        
-        // Position in grid
-        tile.position.x = (i - gridSize / 2) * spacing;
-        tile.position.y = (j - gridSize / 2) * spacing;
-        tile.position.z = -30;
-        
-        // Store initial position and random properties
-        tile.userData = {
-          initialY: tile.position.y,
-          initialX: tile.position.x,
-          speed: 0.5 + Math.random() * 0.25,
-          rotationSpeed: 0.001 + Math.random() * 0.002,
-          amplitude: 2 + Math.random() * 3,
-          phase: Math.random() * Math.PI * 2
-        };
-
-        tiles.push(tile);
-        scene.add(tile);
-      }
-    }
 
     // Create floating particles
     const particleGeometry = new THREE.BufferGeometry();
@@ -157,42 +97,9 @@ export default function ThreeHero() {
       animationFrameRef.current = requestAnimationFrame(animate);
       time += 0.01;
 
-      // Animate tiles with wave effect
-      tiles.forEach((tile, index) => {
-        const userData = tile.userData;
-        
-        // Wave motion
-        tile.position.y = userData.initialY + 
-          Math.sin(time * userData.speed + userData.phase) * userData.amplitude;
-        
-        tile.position.z = -30 + 
-          Math.cos(time * userData.speed + userData.phase) * 2;
-
-        // Rotation
-        tile.rotation.x += userData.rotationSpeed;
-        tile.rotation.y += userData.rotationSpeed * 0.5;
-
-        // Mouse interaction
-        const distanceX = tile.position.x - mouse.x * 30;
-        const distanceY = tile.position.y - mouse.y * 30;
-        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-        
-        if (distance < 0) {
-          const force = (20 - distance) / 20;
-          tile.position.x += (mouse.x * 30 - tile.position.x) * force * 0.1;
-          tile.position.y += (mouse.y * 30 - tile.position.y) * force * 0.1;
-          
-          // Change color on hover
-          tile.material.emissiveIntensity = 0.3 * force;
-        } else {
-          // Return to original position
-          tile.position.x += (userData.initialX - tile.position.x) * 0.05;
-        }
-      });
-
       // Rotate particles
-      particles.rotation.y += 0.0005;
-      particles.rotation.x += 0.0002;
+      particles.rotation.y += 0.00015;
+      particles.rotation.x += 0.00010;
 
       // Animate lights
       pointLight1.position.x = Math.sin(time * 0.5) * 30;
