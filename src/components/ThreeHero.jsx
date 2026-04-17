@@ -2,123 +2,128 @@
 
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
 export default function ThreeHero() {
   const containerRef = useRef(null);
-  const sceneRef = useRef(null);
   const animationFrameRef = useRef(null);
 
-  
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Scene setup
     const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 28);
 
-    sceneRef.current = scene;
-    // #37393d
-    scene.fog = new THREE.FogExp2(0x37393d, 0);
-
-    const camera = new THREE.PerspectiveCamera(
-      30,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    camera.position.z = 50;
-    camera.position.y = -50;
-
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ 
-      antialias: true, 
-      alpha: true 
-    });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
     containerRef.current.appendChild(renderer.domElement);
 
-    // Lighting 
-   // #ffffff;
-    const ambientLight = new THREE.AmbientLight(0xffffff, 20);
-    scene.add(ambientLight);
-    // #000000, #ff0088, #000000
-    const pointLight1 = new THREE.PointLight(0x000000, 20, 100);
-    pointLight1.position.set(20, 20, 20);
-    scene.add(pointLight1);
+    // --- Grid of nodes ---
+    const COLS = 18, ROWS = 10;
+    const SPACING = 3.2;
+    const nodePositions = [];
+    const nodeMeshes = [];
+    const nodeGroup = new THREE.Group();
 
-    const pointLight2 = new THREE.PointLight(0xff0088, 20, 100);
-    pointLight2.position.set(-20, -20, 20);
-    scene.add(pointLight2);
+    const nodeMat = new THREE.MeshBasicMaterial({ color: 0x009dff, transparent: true, opacity: 0.55 });
 
-    const pointLight3 = new THREE.PointLight(0x000000, 1.5, 100);
-    pointLight3.position.set(0, 20, -20);
-    scene.add(pointLight3);
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const x = (c - COLS / 2) * SPACING + (Math.random() - 0.5) * 0.8;
+        const y = (r - ROWS / 2) * SPACING + (Math.random() - 0.5) * 0.8;
+        const z = (Math.random() - 0.5) * 6;
+        nodePositions.push(new THREE.Vector3(x, y, z));
 
-    // Create floating tiles grid
-    const tiles = [];
+        const geo = new THREE.CircleGeometry(0.06 + Math.random() * 0.06, 6);
+        const mesh = new THREE.Mesh(geo, nodeMat.clone());
+        mesh.position.set(x, y, z);
+        mesh.userData.baseOpacity = 0.2 + Math.random() * 0.5;
+        mesh.userData.pulseOffset = Math.random() * Math.PI * 2;
+        mesh.material.opacity = mesh.userData.baseOpacity;
+        nodeGroup.add(mesh);
+        nodeMeshes.push(mesh);
+      }
+    }
+    scene.add(nodeGroup);
 
-    // Create floating particles
-    const particleGeometry = new THREE.BufferGeometry();
-    const particleCount = 1000;
-    const positions = new Float32Array(particleCount * 3);
+    // --- Connect nearby nodes with lines ---
+    //  #263b8f
+    const edgeMat = new THREE.LineBasicMaterial({ color: 0x263b8f, transparent: true, opacity: 0.18 });
+    const edgeGroup = new THREE.Group();
+    const MAX_DIST = 4.5;
 
-    for (let i = 0; i < particleCount * 3; i += 3) {
-      positions[i] = (Math.random() - 0.5) * 200;
-      positions[i + 1] = (Math.random() - 0.5) * 200;
-      positions[i + 2] = (Math.random() - 0.5) * 200;
+    for (let i = 0; i < nodePositions.length; i++) {
+      for (let j = i + 1; j < nodePositions.length; j++) {
+        const dist = nodePositions[i].distanceTo(nodePositions[j]);
+        if (dist < MAX_DIST) {
+          const geo = new THREE.BufferGeometry().setFromPoints([nodePositions[i], nodePositions[j]]);
+          const mat = edgeMat.clone();
+          mat.opacity = 0.18 * (1 - dist / MAX_DIST);
+          const line = new THREE.Line(geo, mat);
+          edgeGroup.add(line);
+        }
+      }
+    }
+    scene.add(edgeGroup);
+
+    // --- Traveling pulse dots along some edges ---
+    const pulses = [];
+    // #587299
+    const pulseMat = new THREE.MeshBasicMaterial({ color: 0x587299, transparent: true, opacity: 0.9 });
+    const pulseGeo = new THREE.CircleGeometry(0.1, 8);
+
+    const edgeChildren = edgeGroup.children;
+    const selectedEdges = edgeChildren.filter((_, i) => i % 7 === 0).slice(0, 30);
+    for (const edge of selectedEdges) {
+      const positions = edge.geometry.attributes.position;
+      const a = new THREE.Vector3(positions.getX(0), positions.getY(0), positions.getZ(0));
+      const b = new THREE.Vector3(positions.getX(1), positions.getY(1), positions.getZ(1));
+      const dot = new THREE.Mesh(pulseGeo.clone(), pulseMat.clone());
+      dot.userData = { a, b, t: Math.random(), speed: 0.003 + Math.random() * 0.00005, dir: Math.random() > 0.5 ? 1 : -1 };
+      scene.add(dot);
+      pulses.push(dot);
     }
 
-    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-    const particleMaterial = new THREE.PointsMaterial({
-      // #ffffff 
-      color: 0xffffff ,
-      size: 0.3,
-      transparent: true,
-      opacity: 0.6,
-      blending: THREE.AdditiveBlending
-    });
-
-    const particles = new THREE.Points(particleGeometry, particleMaterial);
-    scene.add(particles);
-
-    // Mouse interaction
+    // --- Mouse parallax ---
     const mouse = { x: 0, y: 0 };
-    const handleMouseMove = (event) => {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    const handleMouseMove = (e) => {
+      mouse.x = (e.clientX / window.innerWidth - 0.5);
+      mouse.y = (e.clientY / window.innerHeight - 0.5);
     };
     window.addEventListener('mousemove', handleMouseMove);
 
-    // Animation loop
     let time = 0;
     const animate = () => {
       animationFrameRef.current = requestAnimationFrame(animate);
       time += 0.01;
 
-      // Rotate particles
-      particles.rotation.y += 0.00015;
-      particles.rotation.x += 0.00010;
+      // Gentle parallax drift
+      nodeGroup.rotation.y = mouse.x * 0.08;
+      nodeGroup.rotation.x = -mouse.y * 0.05;
+      edgeGroup.rotation.y = mouse.x * 0.08;
+      edgeGroup.rotation.x = -mouse.y * 0.05;
 
-      // Animate lights
-      pointLight1.position.x = Math.sin(time * 0.5) * 30;
-      pointLight1.position.z = Math.cos(time * 0.5) * 30;
-      
-      pointLight2.position.x = Math.cos(time * 0.7) * 30;
-      pointLight2.position.y = Math.sin(time * 0.7) * 30;
+      // Pulse node brightness
+      for (const mesh of nodeMeshes) {
+        const pulse = 0.5 + 0.5 * Math.sin(time * 1.2 + mesh.userData.pulseOffset);
+        mesh.material.opacity = mesh.userData.baseOpacity * (0.6 + 0.4 * pulse);
+      }
 
-      // Camera gentle movement
-      camera.position.x = mouse.x * 5;
-      camera.position.y = 10 + mouse.y * 5;
-      camera.lookAt(0, 0, 0);
+      // Move pulse dots
+      for (const dot of pulses) {
+        dot.userData.t += dot.userData.speed * dot.userData.dir;
+        if (dot.userData.t > 1) { dot.userData.t = 0; }
+        if (dot.userData.t < 0) { dot.userData.t = 1; }
+        dot.position.lerpVectors(dot.userData.a, dot.userData.b, dot.userData.t);
+        dot.material.opacity = 0.3 + 0.4 * Math.sin(time * 3 + dot.userData.t * Math.PI);
+      }
 
       renderer.render(scene, camera);
     };
-
     animate();
 
-    // Handle window resize
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -126,39 +131,20 @@ export default function ThreeHero() {
     };
     window.addEventListener('resize', handleResize);
 
-    // Cleanup
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
+      cancelAnimationFrame(animationFrameRef.current);
       if (containerRef.current && renderer.domElement) {
         containerRef.current.removeChild(renderer.domElement);
       }
-      
-      // Dispose of Three.js objects
-      tiles.forEach(tile => {
-        tile.geometry.dispose();
-        tile.material.dispose();
-      });
-      particleGeometry.dispose();
-      particleMaterial.dispose();
       renderer.dispose();
     };
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 1
-      }}
-    />
+    <div ref={containerRef} style={{
+      position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1
+    }} />
   );
 }
