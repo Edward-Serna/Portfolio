@@ -35,7 +35,7 @@ export default function Navbar() {
 
   return (
     <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
-      <Link href="/" className={styles.logo}>Edward Serna</Link>
+      <Link href="/" className={styles.logo}></Link>
 
       <div className={`${styles.links} ${menuOpen ? styles.open : ''}`}>
         <a href="/#about" onClick={() => setMenuOpen(false)}>About</a>

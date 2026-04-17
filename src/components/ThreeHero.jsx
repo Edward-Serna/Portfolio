@@ -27,7 +27,7 @@ export default function ThreeHero() {
     const nodeMeshes = [];
     const nodeGroup = new THREE.Group();
 
-    const nodeMat = new THREE.MeshBasicMaterial({ color: 0x009dff, transparent: true, opacity: 0.55 });
+    const nodeMat = new THREE.MeshBasicMaterial({ color: 0x4b4b4b, transparent: true, opacity: 0.55 });
 
     for (let r = 0; r < ROWS; r++) {
       for (let c = 0; c < COLS; c++) {
@@ -49,8 +49,8 @@ export default function ThreeHero() {
     scene.add(nodeGroup);
 
     // --- Connect nearby nodes with lines ---
-    //  #263b8f
-    const edgeMat = new THREE.LineBasicMaterial({ color: 0x263b8f, transparent: true, opacity: 0.18 });
+    //  #7c7c7c
+    const edgeMat = new THREE.LineBasicMaterial({ color: 0x4b4b4b, transparent: true, opacity: 0.18 });
     const edgeGroup = new THREE.Group();
     const MAX_DIST = 4.5;
 
@@ -70,8 +70,8 @@ export default function ThreeHero() {
 
     // --- Traveling pulse dots along some edges ---
     const pulses = [];
-    // #587299
-    const pulseMat = new THREE.MeshBasicMaterial({ color: 0x587299, transparent: true, opacity: 0.9 });
+    // #4b4b4b
+    const pulseMat = new THREE.MeshBasicMaterial({ color: 0x4b4b4b, transparent: true, opacity: 0.9 });
     const pulseGeo = new THREE.CircleGeometry(0.1, 8);
 
     const edgeChildren = edgeGroup.children;

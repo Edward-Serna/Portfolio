@@ -1,7 +1,7 @@
 /* ── Dark theme (default) ── */
 [data-theme="dark"], :root {
   --bg:            #080b10;
-  --bg-surface:    #0c131d;
+  --bg-surface:    #0b0e13;
   --bg-card:       rgba(255, 255, 255, 0.04);
   --nav-bg:        rgba(8, 11, 16, 0.92);
   --border:        rgba(255, 255, 255, 0.08);
@@ -10,7 +10,7 @@
   --text:          #f0f0f5;
   --text-muted:    #8b8fa8;
   --text-dim:      #c4c6d4;
-  --primary:       rgb(220, 234, 247);
+  --primary:       #78a2fd;
   --primary-dim:   rgba(0, 157, 255, 0.12);
   --primary-glow:  rgba(0, 157, 255, 0.25);
   --btn-text:      #080b10;

@@ -190,8 +190,6 @@ export default function Home() {
   const stats = [
     { value: '3.5 yrs', label: 'Research Experience' },
     { value: '6+', label: 'Projects Shipped' },
-    { value: '93%', label: 'ML Inference Accuracy' },
-    { value: '1st', label: 'Place, Cup Car Competition' },
   ];
 
   const experience = [
@@ -238,7 +236,7 @@ export default function Home() {
           </div>
           <div className={styles.heroText}>
             <p className={styles.heroEyebrow}>Computer Engineering · UTSA · Class of 2025</p>
-            {/* <h1 className={styles.heroName}>Edward<br />Serna</h1> */}
+            <h1 className={styles.heroName}>Edward Serna</h1>
             <p className={styles.heroSub}>
               Embedded systems engineer with a research background in autonomous drones,
               on-device machine learning, and full-stack IoT development.
@@ -284,7 +282,7 @@ export default function Home() {
               <p className={styles.aboutText}>
                 I'm a Computer Engineering graduate from UTSA where I spent 3.5 years as a research
                 assistant in the Unmanned Systems Lab building the ModiFly autonomous drone platform.
-                My work lives at the intersection of hardware and software — writing firmware that
+                My work lives at the intersection of hardware and software, writing firmware that
                 talks to real sensors, designing systems that make decisions in real time, and
                 building the tooling that makes complex systems observable and controllable.
               </p>
@@ -297,10 +295,10 @@ export default function Home() {
             <div className={styles.aboutRight}>
               <div className={styles.skillsBlock}>
                 {[
-                  { label: 'Languages', items: ['C / C++', 'Python', 'JavaScript', 'Verilog HDL'] },
-                  { label: 'Embedded', items: ['MSP430', 'ESP32', 'ARM Cortex-M', 'MAVLink', 'ArduPilot'] },
+                  { label: 'Languages', items: ['C/C++', 'Python', 'JavaScript', 'HTML', 'CSS' ,'Verilog HDL', 'LUA'] },
+                  { label: 'Embedded', items: ['MSP430', 'ESP32', 'ARM Cortex-M', 'MAVLink', 'ArduPilot', 'STM32', 'Arduino'] },
                   { label: 'Web & Cloud', items: ['React', 'Next.js', 'Node.js', 'MongoDB', 'Vercel'] },
-                  { label: 'Tools', items: ['Git', 'CMake', 'CLion', 'Linux', 'Cadence Innovus'] },
+                  { label: 'Tools', items: [ 'VS Code / VS Community','Git', 'CMake', 'CLion', 'Linux', 'Cadence Innovus'] },
                 ].map((cat) => (
                   <div key={cat.label} className={styles.skillRow}>
                     <span className={styles.skillLabel}>{cat.label}</span>
@@ -321,7 +319,7 @@ export default function Home() {
       <section className={styles.experience} id="experience">
         <div className={styles.container}>
           <p className={styles.sectionEyebrow}>Experience</p>
-          <h2 className={styles.sectionTitle}>Where I've Worked</h2>
+          <h2 className={styles.sectionTitle}>Professional Foundations</h2>
           <div className={styles.timeline}>
             {experience.map((e, i) => (
               <div key={i} className={styles.timelineItem}>
@@ -360,7 +358,7 @@ export default function Home() {
                 tabIndex={0}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveProject(project); }}
               >
-                <div className={styles.projectNumber}>0{index + 1}</div>
+                {/* <div className={styles.projectNumber}>0{index + 1}</div> */}
                 <h3 className={styles.projectTitle}>{project.title}</h3>
                 <p className={styles.projectDescription}>{project.description}</p>
                 <div className={styles.projectTags}>
