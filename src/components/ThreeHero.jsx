@@ -2,216 +2,128 @@
 
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
 export default function ThreeHero() {
   const containerRef = useRef(null);
-  const sceneRef = useRef(null);
   const animationFrameRef = useRef(null);
 
-  
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Scene setup
     const scene = new THREE.Scene();
-    const loader = new OBJLoader();
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 28);
 
-    loader.load(
-    'SpaceShip.obj', 
-
-    // called when resource is loaded
-    function ( object ) {
-        scene.add( object );
-    },
-
-    // called when loading is in progresses
-    function ( xhr ) {
-        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-    },
-
-    // called when loading has errors
-    function ( error ) {
-        console.log( 'An error happened' );
-    }
-    );
-
-    sceneRef.current = scene;
-    // #37393d
-    scene.fog = new THREE.FogExp2(0x37393d, 0);
-
-    // Camera
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    camera.position.z = 50;
-    camera.position.y = -50;
-
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ 
-      antialias: true, 
-      alpha: true 
-    });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
     containerRef.current.appendChild(renderer.domElement);
 
-    // Lighting 
-   // #ffffff;
-    const ambientLight = new THREE.AmbientLight(0xffffff, 20);
-    scene.add(ambientLight);
-    // #000000, #ff0088, #000000
-    const pointLight1 = new THREE.PointLight(0x000000, 20, 100);
-    pointLight1.position.set(20, 20, 20);
-    scene.add(pointLight1);
+    // --- Grid of nodes ---
+    const COLS = 18, ROWS = 10;
+    const SPACING = 3.2;
+    const nodePositions = [];
+    const nodeMeshes = [];
+    const nodeGroup = new THREE.Group();
 
-    const pointLight2 = new THREE.PointLight(0xff0088, 20, 100);
-    pointLight2.position.set(-20, -20, 20);
-    scene.add(pointLight2);
+    const nodeMat = new THREE.MeshBasicMaterial({ color: 0x4b4b4b, transparent: true, opacity: 0.55 });
 
-    const pointLight3 = new THREE.PointLight(0x000000, 1.5, 100);
-    pointLight3.position.set(0, 20, -20);
-    scene.add(pointLight3);
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const x = (c - COLS / 2) * SPACING + (Math.random() - 0.5) * 0.8;
+        const y = (r - ROWS / 2) * SPACING + (Math.random() - 0.5) * 0.8;
+        const z = (Math.random() - 0.5) * 6;
+        nodePositions.push(new THREE.Vector3(x, y, z));
 
-    // Create floating tiles grid
-    const tiles = [];
-    const gridSize = 0;
-    const spacing = 5;
-    const tileGeometry = new THREE.BoxGeometry(3, 3, 0.5);
-    
-    for (let i = 0; i < gridSize; i++) {
-      for (let j = 0; j < gridSize; j++) {
-        const material = new THREE.MeshPhysicalMaterial({
-          // #0d0d0d #1f1f1f
-          color: 0x1f1f1f,
-          metalness: 0.9,
-          roughness: 0.1,
-          envMapIntensity: 1,
-          clearcoat: 1,
-          clearcoatRoughness: 0.1,
-          emissive: new THREE.Color(0x000000),
-          emissiveIntensity: 10
-        });
-
-        const tile = new THREE.Mesh(tileGeometry, material);
-        
-        // Position in grid
-        tile.position.x = (i - gridSize / 2) * spacing;
-        tile.position.y = (j - gridSize / 2) * spacing;
-        tile.position.z = -30;
-        
-        // Store initial position and random properties
-        tile.userData = {
-          initialY: tile.position.y,
-          initialX: tile.position.x,
-          speed: 0.5 + Math.random() * 0.25,
-          rotationSpeed: 0.001 + Math.random() * 0.002,
-          amplitude: 2 + Math.random() * 3,
-          phase: Math.random() * Math.PI * 2
-        };
-
-        tiles.push(tile);
-        scene.add(tile);
+        const geo = new THREE.CircleGeometry(0.06 + Math.random() * 0.06, 6);
+        const mesh = new THREE.Mesh(geo, nodeMat.clone());
+        mesh.position.set(x, y, z);
+        mesh.userData.baseOpacity = 0.2 + Math.random() * 0.5;
+        mesh.userData.pulseOffset = Math.random() * Math.PI * 2;
+        mesh.material.opacity = mesh.userData.baseOpacity;
+        nodeGroup.add(mesh);
+        nodeMeshes.push(mesh);
       }
     }
+    scene.add(nodeGroup);
 
-    // Create floating particles
-    const particleGeometry = new THREE.BufferGeometry();
-    const particleCount = 1000;
-    const positions = new Float32Array(particleCount * 3);
+    // --- Connect nearby nodes with lines ---
+    //  #7c7c7c
+    const edgeMat = new THREE.LineBasicMaterial({ color: 0x4b4b4b, transparent: true, opacity: 0.18 });
+    const edgeGroup = new THREE.Group();
+    const MAX_DIST = 4.5;
 
-    for (let i = 0; i < particleCount * 3; i += 3) {
-      positions[i] = (Math.random() - 0.5) * 200;
-      positions[i + 1] = (Math.random() - 0.5) * 200;
-      positions[i + 2] = (Math.random() - 0.5) * 200;
+    for (let i = 0; i < nodePositions.length; i++) {
+      for (let j = i + 1; j < nodePositions.length; j++) {
+        const dist = nodePositions[i].distanceTo(nodePositions[j]);
+        if (dist < MAX_DIST) {
+          const geo = new THREE.BufferGeometry().setFromPoints([nodePositions[i], nodePositions[j]]);
+          const mat = edgeMat.clone();
+          mat.opacity = 0.18 * (1 - dist / MAX_DIST);
+          const line = new THREE.Line(geo, mat);
+          edgeGroup.add(line);
+        }
+      }
+    }
+    scene.add(edgeGroup);
+
+    // --- Traveling pulse dots along some edges ---
+    const pulses = [];
+    // #4b4b4b
+    const pulseMat = new THREE.MeshBasicMaterial({ color: 0x4b4b4b, transparent: true, opacity: 0.9 });
+    const pulseGeo = new THREE.CircleGeometry(0.1, 8);
+
+    const edgeChildren = edgeGroup.children;
+    const selectedEdges = edgeChildren.filter((_, i) => i % 7 === 0).slice(0, 30);
+    for (const edge of selectedEdges) {
+      const positions = edge.geometry.attributes.position;
+      const a = new THREE.Vector3(positions.getX(0), positions.getY(0), positions.getZ(0));
+      const b = new THREE.Vector3(positions.getX(1), positions.getY(1), positions.getZ(1));
+      const dot = new THREE.Mesh(pulseGeo.clone(), pulseMat.clone());
+      dot.userData = { a, b, t: Math.random(), speed: 0.003 + Math.random() * 0.00005, dir: Math.random() > 0.5 ? 1 : -1 };
+      scene.add(dot);
+      pulses.push(dot);
     }
 
-    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-    const particleMaterial = new THREE.PointsMaterial({
-      // #ffffff 
-      color: 0xffffff ,
-      size: 0.3,
-      transparent: true,
-      opacity: 0.6,
-      blending: THREE.AdditiveBlending
-    });
-
-    const particles = new THREE.Points(particleGeometry, particleMaterial);
-    scene.add(particles);
-
-    // Mouse interaction
+    // --- Mouse parallax ---
     const mouse = { x: 0, y: 0 };
-    const handleMouseMove = (event) => {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    const handleMouseMove = (e) => {
+      mouse.x = (e.clientX / window.innerWidth - 0.5);
+      mouse.y = (e.clientY / window.innerHeight - 0.5);
     };
     window.addEventListener('mousemove', handleMouseMove);
 
-    // Animation loop
     let time = 0;
     const animate = () => {
       animationFrameRef.current = requestAnimationFrame(animate);
       time += 0.01;
 
-      // Animate tiles with wave effect
-      tiles.forEach((tile, index) => {
-        const userData = tile.userData;
-        
-        // Wave motion
-        tile.position.y = userData.initialY + 
-          Math.sin(time * userData.speed + userData.phase) * userData.amplitude;
-        
-        tile.position.z = -30 + 
-          Math.cos(time * userData.speed + userData.phase) * 2;
+      // Gentle parallax drift
+      nodeGroup.rotation.y = mouse.x * 0.08;
+      nodeGroup.rotation.x = -mouse.y * 0.05;
+      edgeGroup.rotation.y = mouse.x * 0.08;
+      edgeGroup.rotation.x = -mouse.y * 0.05;
 
-        // Rotation
-        tile.rotation.x += userData.rotationSpeed;
-        tile.rotation.y += userData.rotationSpeed * 0.5;
+      // Pulse node brightness
+      for (const mesh of nodeMeshes) {
+        const pulse = 0.5 + 0.5 * Math.sin(time * 1.2 + mesh.userData.pulseOffset);
+        mesh.material.opacity = mesh.userData.baseOpacity * (0.6 + 0.4 * pulse);
+      }
 
-        // Mouse interaction
-        const distanceX = tile.position.x - mouse.x * 30;
-        const distanceY = tile.position.y - mouse.y * 30;
-        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-        
-        if (distance < 0) {
-          const force = (20 - distance) / 20;
-          tile.position.x += (mouse.x * 30 - tile.position.x) * force * 0.1;
-          tile.position.y += (mouse.y * 30 - tile.position.y) * force * 0.1;
-          
-          // Change color on hover
-          tile.material.emissiveIntensity = 0.3 * force;
-        } else {
-          // Return to original position
-          tile.position.x += (userData.initialX - tile.position.x) * 0.05;
-        }
-      });
-
-      // Rotate particles
-      particles.rotation.y += 0.0005;
-      particles.rotation.x += 0.0002;
-
-      // Animate lights
-      pointLight1.position.x = Math.sin(time * 0.5) * 30;
-      pointLight1.position.z = Math.cos(time * 0.5) * 30;
-      
-      pointLight2.position.x = Math.cos(time * 0.7) * 30;
-      pointLight2.position.y = Math.sin(time * 0.7) * 30;
-
-      // Camera gentle movement
-      camera.position.x = mouse.x * 5;
-      camera.position.y = 10 + mouse.y * 5;
-      camera.lookAt(0, 0, 0);
+      // Move pulse dots
+      for (const dot of pulses) {
+        dot.userData.t += dot.userData.speed * dot.userData.dir;
+        if (dot.userData.t > 1) { dot.userData.t = 0; }
+        if (dot.userData.t < 0) { dot.userData.t = 1; }
+        dot.position.lerpVectors(dot.userData.a, dot.userData.b, dot.userData.t);
+        dot.material.opacity = 0.3 + 0.4 * Math.sin(time * 3 + dot.userData.t * Math.PI);
+      }
 
       renderer.render(scene, camera);
     };
-
     animate();
 
-    // Handle window resize
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -219,39 +131,20 @@ export default function ThreeHero() {
     };
     window.addEventListener('resize', handleResize);
 
-    // Cleanup
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
+      cancelAnimationFrame(animationFrameRef.current);
       if (containerRef.current && renderer.domElement) {
         containerRef.current.removeChild(renderer.domElement);
       }
-      
-      // Dispose of Three.js objects
-      tiles.forEach(tile => {
-        tile.geometry.dispose();
-        tile.material.dispose();
-      });
-      particleGeometry.dispose();
-      particleMaterial.dispose();
       renderer.dispose();
     };
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 1
-      }}
-    />
+    <div ref={containerRef} style={{
+      position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1
+    }} />
   );
 }
