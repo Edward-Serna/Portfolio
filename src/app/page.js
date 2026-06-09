@@ -281,7 +281,7 @@ export default function Home() {
             <div className={styles.aboutLeft}>
               <p className={styles.aboutText}>
                 I'm a Computer Engineering graduate from UTSA where I spent 3.5 years as a research
-                assistant in the Unmanned Systems Lab building the ModiFly autonomous drone platform.
+                assistant in the Unmanned Systems Lab building the ModiFly drone platform.
                 My work lives at the intersection of hardware and software, writing firmware that
                 talks to real sensors, designing systems that make decisions in real time, and
                 building the tooling that makes complex systems observable and controllable.
@@ -315,7 +315,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── EXPERIENCE ── */}
       <section className={styles.experience} id="experience">
         <div className={styles.container}>
           <p className={styles.sectionEyebrow}>Experience</p>
@@ -342,7 +341,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── PROJECTS ── */}
       <section className={styles.projects} id="projects">
         <div className={styles.container}>
           <p className={styles.sectionEyebrow}>Work</p>
@@ -358,7 +356,6 @@ export default function Home() {
                 tabIndex={0}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveProject(project); }}
               >
-                {/* <div className={styles.projectNumber}>0{index + 1}</div> */}
                 <h3 className={styles.projectTitle}>{project.title}</h3>
                 <p className={styles.projectDescription}>{project.description}</p>
                 <div className={styles.projectTags}>
@@ -373,7 +370,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── GALLERY ── */}
       <section className={styles.gallery} id="gallery">
         <div className={styles.container}>
           <p className={styles.sectionEyebrow}>Gallery</p>
@@ -402,11 +398,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── CONTACT ── */}
       <section className={styles.contact}>
         <div className={styles.container}>
-          <p className={styles.sectionEyebrow}>Contact</p>
-          <h2 className={styles.sectionTitle}>Get In Touch</h2>
+          {/* <p className={styles.sectionEyebrow}>Contact</p> */}
+          <h2 className={styles.contactTitle}>Contact</h2>
           <p className={styles.contactText}>
             Open to full-time roles in embedded firmware, hardware-software integration, and systems engineering.
           </p>
@@ -416,7 +411,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
       <footer className={styles.footer}>
         <div className={styles.footerLinks}>
           <a href="https://github.com/Edward-Serna" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -424,7 +418,7 @@ export default function Home() {
           <a href="https://edwardserna.dev" target="_blank" rel="noopener noreferrer">edwardserna.dev</a>
           <a href="/Edward_Serna_Resume.pdf" download>Resume</a>
         </div>
-        <p className={styles.copyright}>© 2026 Edward Serna</p>
+        <p className={styles.copyright}>© 2025–2026 Edward Serna. All rights reserved.</p>
       </footer>
     </div>
   );
