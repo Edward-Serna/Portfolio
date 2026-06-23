@@ -99,7 +99,12 @@ const projects = [
 ];
 
 const galleryItems = [
-  // { type: 'jpeg', src: '', caption: '', label: 'jpg' },
+  // { type: 'video', src: '', caption: '', label: 'video' },
+  { type: 'video', src: 'https://mrdlq3zu4lbpp4p1.public.blob.vercel-storage.com/Tilt_Table.mp4', caption: 'Tilt Table', label: 'video' },
+  { type: 'video', src: 'https://mrdlq3zu4lbpp4p1.public.blob.vercel-storage.com/Drone_Flight_Outdoor.mp4', caption: 'Outdoor Test Flight', label: 'video' },
+  { type: 'video', src: 'https://mrdlq3zu4lbpp4p1.public.blob.vercel-storage.com/Music_Glove.mp4', caption: 'Music Glove', label: 'video' },
+  { type: 'video', src: 'https://mrdlq3zu4lbpp4p1.public.blob.vercel-storage.com/Drone_Flight_Indoor.mp4', caption: 'Indoor Test Flight', label: 'video' }, 
+  { type: 'video', src: 'https://mrdlq3zu4lbpp4p1.public.blob.vercel-storage.com/Cup_Car_Race.mp4', caption: 'Cup Car Race', label: 'video' },
   { type: 'jpeg', src: 'https://mrdlq3zu4lbpp4p1.public.blob.vercel-storage.com/senior_design_show.jpg', caption: 'Senior Design Showcase', label: 'jpg' },
   { type: 'jpeg', src: 'https://mrdlq3zu4lbpp4p1.public.blob.vercel-storage.com/senior_design_planterbox.jpg', caption: 'Automatic Plantcare System - Hydroponic Plants', label: 'jpg' },
   { type: 'jpeg', src: 'https://mrdlq3zu4lbpp4p1.public.blob.vercel-storage.com/planterbox_circuit.jpg', caption: 'Senior Design - Planterbox Circuit Test', label: 'jpg' },
@@ -398,7 +403,7 @@ export default function Home() {
               <div key={i} className={styles.galleryItem}>
                 {item.src ? (
                   item.type === 'video' ? (
-                    <video src={item.src} muted loop playsInline />
+                    <video src={item.src} alt={item.caption} />
                   ) : (
                     <img src={item.src} alt={item.caption} />
                   )
