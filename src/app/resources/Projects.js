@@ -1,0 +1,88 @@
+const projects = [
+  {
+    id: 'neural-network-msp430',
+    title: 'Deep Neural Network on MSP430',
+    description: '784-32-10 neural network implemented from scratch in C for handwritten digit recognition on a resource-constrained embedded microcontroller.',
+    tags: ['C', 'Embedded ML', 'MSP430', 'MNIST'],
+    color: '#FF6B6B',
+    github: 'https://github.com/Edward-Serna',
+    star: {
+      situation: 'Needed to demonstrate feasibility of running neural network inference on a microcontroller with only 8 KB of RAM and no FPU — hardware that would typically be considered far too constrained for any ML workload.',
+      task: 'Design, implement, and validate a full forward-pass neural network in bare-metal C targeting the MSP430FR5994, fitting weights in flash and activations in SRAM with no external libraries.',
+      action: 'Built custom fixed-point matrix multiplication routines, implemented a Q15 sigmoid approximation, structured weight storage in flash using linker sections, and validated inference output via UART against a Python reference implementation.',
+      result: 'Achieved 93% accuracy on a held-out MNIST test set with sub-100ms inference time at 16 MHz, proving embedded ML feasibility on severely constrained hardware.',
+    },
+  },
+  {
+    id: 'planterbox',
+    title: 'PlanterBox',
+    description: 'Full-stack IoT hydroponic system with ESP32, Next.js, and MongoDB for real-time plant monitoring and automated nutrient dosing.',
+    tags: ['ESP32', 'Next.js', 'MongoDB', 'IoT'],
+    color: '#4ECDC4',
+    github: 'https://github.com/Edward-Serna/PlanterBox',
+    demo: 'https://planterbox.edwardserna.dev',
+    star: {
+      situation: 'Hydroponic systems require precise control of pH, nutrient concentration, and lighting — manual monitoring is error-prone and time-consuming, leading to plant loss.',
+      task: 'Build an end-to-end automated monitoring and control system that could run 24/7 unattended, surfacing live sensor data through a web dashboard and triggering dosing pumps automatically.',
+      action: 'Wrote ESP32 firmware in C++ to poll DHT, pH, PPM, and ultrasonic sensors over a state-machine-driven control loop. Built a Next.js dashboard with MongoDB time-series storage, REST API, and Google OAuth. Deployed on Vercel with automated HTTPS.',
+      result: 'System ran continuously for 6+ weeks with automated nutrient dosing maintaining target pH within ±0.2, accessible remotely from any device.',
+    },
+  },
+  {
+    id: 'modifly',
+    title: 'ModiFly Drone Platform',
+    description: 'Modular C++ drone control software using MAVLink protocols with real-time OpenGL visualization and autonomous flight planning.',
+    tags: ['C++', 'MAVLink', 'OpenGL', 'ArduPilot'],
+    color: '#FFE66D',
+    github: 'https://github.com/Edward-Serna/ModiFly',
+    star: {
+      situation: 'The UTSA Unmanned Systems Lab needed a flexible, extensible ground control platform for drone research that wasn\'t locked to a single autopilot or UI paradigm.',
+      task: 'Architect and build a production-grade C++ application capable of managing MAVLink telemetry, launching SITL simulations, and visualizing drone state in real time — extensible by future researchers.',
+      action: 'Designed a service-container architecture with dynamic node registration, integrated MAVLink v2 for bidirectional communication with ArduPilot, built an ImGui node editor for visual connection management, and wrote an OpenGL 3D viewer with orbit camera controls using GLM.',
+      result: 'Delivered a platform used as the primary research tool in the lab for 3+ years, with SITL integration enabling safe autonomous flight testing without physical hardware.',
+    },
+  },
+  {
+    id: 'cup-car',
+    title: 'Autonomous Cup Car',
+    description: 'PID-controlled autonomous vehicle with line camera vision system — fastest track time in class competition.',
+    tags: ['C', 'PID Control', 'FRDM-KL25Z', 'Computer Vision'],
+    color: '#A8DADC',
+    star: {
+      situation: 'Class competition required an autonomous vehicle to navigate a track at maximum speed using only a line camera — no GPS, no IMU, just raw image data and a microcontroller.',
+      task: 'Implement a real-time control system that could process camera data, compute steering corrections via PID, and modulate motor speed — all within the interrupt budget of an ARM Cortex-M0+ running at 48 MHz.',
+      action: 'Wrote interrupt-driven camera line detection with a centroid-tracking algorithm, tuned PID constants empirically using UART logging, implemented PWM motor control with deadband compensation, and added a state machine for race-start detection.',
+      result: 'Achieved the fastest lap time in the Microcomputer Systems II class — 1st place finish.',
+    },
+  },
+  {
+    id: 'music-glove',
+    title: 'Music Glove Controller',
+    description: 'Gesture-based MIDI interface using flex sensors and accelerometers on MSP430 — 3rd place in class showcase.',
+    tags: ['C', 'MSP430', 'Sensors', 'ADC'],
+    color: '#F4A261',
+    star: {
+      situation: 'Microcomputer Systems I final project required building a creative embedded application demonstrating ADC, interrupts, and UART on the MSP430 platform.',
+      task: 'Design a wearable that translates hand gestures into musical output with low enough latency to be usable as a live performance instrument.',
+      action: 'Integrated flex sensors and an accelerometer through the MSP430 ADC, applied a moving-average filter to reduce noise, mapped gesture thresholds to MIDI note values, and output MIDI bytes over UART to a synthesizer.',
+      result: 'Awarded 3rd place in the Microcomputer Systems I class project showcase out of 30+ submissions.',
+    },
+  },
+  {
+    id: 'web-portfolio',
+    title: 'This Portfolio',
+    description: 'Built with Next.js 15, Three.js, and deployed on Vercel with custom animations and dynamic project routing.',
+    tags: ['React', 'Next.js', 'Three.js', 'CSS'],
+    color: '#E76F51',
+    github: 'https://github.com/Edward-Serna/Portfolio',
+    demo: 'https://edwardserna.dev',
+    star: {
+      situation: 'Needed a portfolio that could stand out to embedded and systems engineering recruiters while also demonstrating frontend capability — avoiding the generic template look.',
+      task: 'Design and build a performant, visually distinctive portfolio from scratch using modern web tools, with a custom 3D background and dynamic project pages.',
+      action: 'Built on Next.js 15 App Router with Three.js for a PCB-netlist-inspired WebGL background, implemented light/dark theming via CSS custom properties and React context, and created a STAR-method project modal system.',
+      result: 'Deployed to edwardserna.dev with Vercel analytics, Lighthouse performance score above 90, and a design that reflects both technical depth and visual craft.',
+    },
+  },
+];
+
+export { projects };
